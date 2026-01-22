@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "--Create External File Format\nIF NOT EXISTS (SELECT * FROM\nsys.external_file_formats WHERE name=\n'SynapseDelimited TextFormat')\nCREATE EXTERNAL FILE FORMAT\nSynapseDelimitedTextFormat\nWITH(\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS(\n        FIELD_TERMINATOR = '',\n        USE_TYPE_DEFAULT = FALSE)\n        );\n        GO\n\n--Create External DATA SOURCE\nCREATE EXTERNAL DATA SOURCE\nPayrollDataLake\nWITH(\n    LOCATION = 'https://nycstorageaccount.dfs.core.windows.net/adlsnycpayroll-akshitha-b'\n);\nGO\n\n--Create EXTERNAL TABLE\nCREATE EXTERNAL TABLE\ndbo.NYC_Payroll_Summary(\n    FiscalYear INT,\n    AgencyName VARCHAR(50),\n    TotalPaid FLOAT\n)\nWITH(\n    LOCATION = '/',\n    DATA_SOURCE = PayrollDataLake,\n    FILE_FORMAT = SynapseDelimitedTextFormat\n);\nGO\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "DatabaseDB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
